@@ -24,19 +24,19 @@ A common feature between all of these modern state management frameworks is thei
 
 ### Why
 
-**My Context For Why**
+#### My Context For Why
 Up until I was introduced to Redux I hadn't given much thought to good state management. I was using jQuery plugins for my UI and for storing state, which for small projects was working well enough.
 
 It was when I was tasked with creating a UI for entering complex data with dynamic rows and columns and needing the ability to undo, redo and support not loosing data when the tab is accidentially closed that I started to take Redux more seriously.
 
 Even though I had a degree in computer science and was fairly comfortable with the idea of pure functions, immutable data structures and creating testable code in languages like C# and C++, I was less familiar with applying those concepts to front end developement beyond simple unit tests.
 
-**My Measons For Why**
+#### My Reasons For Why
 State management is the application of good computer science fundamentals. It takes lessons learned about functional code, immutable data structures and applies to how a web app should be structured.
 
 As such good state management is about making it testable and making use of functional code that will behave predictably. Of course state management isn't defined by it's use of functional code nor immutable data structures but they are well suited to it.
 
-**Todo Exmaple**
+## Todo Exmaple
 Lets look at a simple todo app example. I'm going to forego and UI just use pure Typescript.
 
 **NOTE** This is not a great example because it already breaks some of the best practices of state management, but it's a starting point and we will improve it.
@@ -102,7 +102,7 @@ That's the core of it! Now you might be thinking I've oversimplified it and yes 
 
 But now that we've done this not great but very simplistic version, what should we really be doing for state management?
 
-**A Better Todo Exmaple**
+## A Better Todo Exmaple
 First off let's look at the core of the state management, we want to be able to manipulate the store in a more centralised way. I'm also going to start using some more Typescript specific code, generally speaking if you are unfamiliar with Typescript the only things to note are that `<TState>` means you can specify what that type is when you create the store.
 
 Lets also put things in files:
