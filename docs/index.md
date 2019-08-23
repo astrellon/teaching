@@ -1,3 +1,3 @@
 # Index
 
-[Creating a modern web app from scratch](modernApp/indedx.md)
+[Creating a modern web app from scratch](modernApp/index.md)
