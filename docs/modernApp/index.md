@@ -27,16 +27,16 @@ A common feature between all of these modern state management frameworks is thei
 #### My Context For Why
 Up until I was introduced to Redux I hadn't given much thought to good state management. I was using jQuery plugins for my UI and for storing state, which for small projects was working well enough.
 
-It was when I was tasked with creating a UI for entering complex data with dynamic rows and columns and needing the ability to undo, redo and support not loosing data when the tab is accidentially closed that I started to take Redux more seriously.
+It was when I was tasked with creating a UI for entering complex data with dynamic rows and columns and needing the ability to undo, redo and support not loosing data when the tab is accidentally closed that I started to take Redux more seriously.
 
-Even though I had a degree in computer science and was fairly comfortable with the idea of pure functions, immutable data structures and creating testable code in languages like C# and C++, I was less familiar with applying those concepts to front end developement beyond simple unit tests.
+Even though I had a degree in computer science and was fairly comfortable with the idea of pure functions, immutable data structures and creating testable code in languages like C# and C++, I was less familiar with applying those concepts to front end development beyond simple unit tests.
 
 #### My Reasons For Why
 State management is the application of good computer science fundamentals. It takes lessons learned about functional code, immutable data structures and applies to how a web app should be structured.
 
 As such good state management is about making it testable and making use of functional code that will behave predictably. Of course state management isn't defined by it's use of functional code nor immutable data structures but they are well suited to it.
 
-## Todo Exmaple
+## Todo Example
 Lets look at a simple todo app example. I'm going to forego and UI just use pure Typescript.
 
 **NOTE** This is not a great example because it already breaks some of the best practices of state management, but it's a starting point and we will improve it.
@@ -102,7 +102,7 @@ That's the core of it! Now you might be thinking I've oversimplified it and yes 
 
 But now that we've done this not great but very simplistic version, what should we really be doing for state management?
 
-## A Better Todo Exmaple
+## A Better Todo Example
 First off let's look at the core of the state management, we want to be able to manipulate the store in a more centralised way. I'm also going to start using some more Typescript specific code, generally speaking if you are unfamiliar with Typescript the only things to note are that `<TState>` means you can specify what that type is when you create the store.
 
 Lets also put things in files:
@@ -112,7 +112,8 @@ Lets also put things in files:
 
 export class Store<TState>
 {
-    // This should be private, however for briefity we'll allow direct access for debugging and clean it up at the end.
+    // This should be private, however for briefing we'll allow direct access
+    // for debugging and clean it up at the end.
     public state: TState;
 
     constructor(initialState: TState)
@@ -221,7 +222,9 @@ export class Store<TState>
 
         for (const subscription of this.subscriptions)
         {
-            // It might be possible for a subscription to trigger another execute which will modify the state again, so we'll make sure to always pass the same new state to all subscriptions everytime.
+            // It might be possible for a subscription to trigger another execute
+            // which will modify the state again, so we'll make sure to always pass
+            // the same new state to all subscriptions each call.
             subscription(newState);
         }
     }
@@ -293,4 +296,4 @@ store.execute(removeItem(1));
 // New state: { todoItems: [ { text: 'Bread', id: 2 } ] }
 ```
 
-We now have a store where we can keep track of when it changes, we can use that save and restore from localStorage if we want and adding support for undo and redo is not much work. We can add these in another lesson but for now this is the core of most state management frameworks, escpecially Redux.
+We now have a store where we can keep track of when it changes, we can use that save and restore from localStorage if we want and adding support for undo and redo is not much work. We can add these in another lesson but for now this is the core of most state management frameworks, especially Redux.
