@@ -1,17 +1,15 @@
 # Creating a modern web app from scratch
-
 Lets create a modern web app but we’re going to create the main components from scratch and we’re going to use Typescript and Parcel Bundler to do it.
 
 We’re going to tackle state management, TSX (Typescript JSX) and why these patterns are used.
 
 - Let’s create a basic state management without and UI.
-- Let’s create a basic reactive UI library without TSX.
+- Let’s create a basic virtual DOM UI library without TSX.
 - Let’s add TSX support.
 
 ## Basic state management
 
 ### What
-
 In relation to web dev state management is simply how the information about the web app is stored.
 
 Very early on in web apps state management was given little thought as most web sites had limited functionality. As seen [here](https://www.javaworld.com/article/2077176/using-javascript-and-forms.html) in an article from 1996 JavaScript is being used to pull and change data on form input elements before the data is sent to the server in a format similar to URL parameters ([more info on MDN about format data](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Sending_and_retrieving_form_data)).
@@ -38,3 +36,35 @@ As such good state management is about making it testable and making use of func
 
 ### Creating our own state management
 [Here](./createStateManagement.md) is an example of creating basic state management. Feel free to skip this part if you're already comfortable with state management.
+
+## Basic Virtual DOM UI
+
+### What is a DOM?
+Firstly a quick note on what a DOM is. DOM stands for Document Object Model and it is the way that a web page is defined. It basically defines that a web page is a document and that the document is structured like a tree, where a node can have multiple children and attributes.
+
+So how does HTML come into this?
+
+HTML is a text representation a DOM. Just like JSON it is simply a format. In theory a JSON compatible format could be used to write web pages should a browser implement that.
+
+A simple example of a parent child element.
+```html
+<div>
+    <strong>Note: </strong> Important Information.
+</div>
+```
+
+The `div` parent element contains two children, the `strong` element and then a plain text node. In some cases the white space before the `strong` node might be included as a text node with white space.
+
+### What
+It's a way of representing the DOM but in a lightweight way. As DOM elements in the browser are actually quite heavy, creating an element can trigger a recalculation of the layout which depending on the complexity of the UI that can be a slow process.
+
+A virtual DOM is like another format that sits on-top of the DOM and is specifically used to apply changes to the DOM in bulk. As updating the DOM will nearly always trigger a recalculation of the layout you want to make as many changes in one go as possible and having a central piece of code that handles doing that helps with reducing unnecessary DOM updates.
+
+Under the hood nearly all virtual DOM implementations use simple Javascript objects as representations and will keep track of the previous render's virtual DOM. Using the previous virtual DOM a diff between the virtual DOMs can be made and only the changes that actually need to be applied. However the feature of applying only the differences between each render is not a core requirement of a virtual DOM, just a common feature between implementations.
+### Why
+
+## Add TSX support to our Virtual DOM UI
+
+### What
+
+### Why
