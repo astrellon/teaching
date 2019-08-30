@@ -40,7 +40,7 @@ As such good state management is about making it testable and making use of func
 ## Basic Virtual DOM UI
 
 ### What is a DOM?
-Firstly a quick note on what a DOM is. DOM stands for Document Object Model and it is the way that a web page is defined. It basically defines that a web page is a document and that the document is structured like a tree, where a node can have multiple children and attributes.
+Firstly a quick note on what a [DOM](https://en.wikipedia.org/wiki/Document_Object_Model) is. DOM stands for Document Object Model and it is the way that a web page is defined. It basically defines that a web page is a document and that the document is structured like a [tree](https://en.wikipedia.org/wiki/Tree_\(data_structure\)), where a node can have multiple children and attributes.
 
 So how does HTML come into this?
 
@@ -55,14 +55,19 @@ A simple example of a parent child element.
 
 The `div` parent element contains two children, the `strong` element and then a plain text node. In some cases the white space before the `strong` node might be included as a text node with white space.
 
-### What
-It's a way of representing the DOM but in a lightweight way. As DOM elements in the browser are actually quite heavy, creating an element can trigger a recalculation of the layout which depending on the complexity of the UI that can be a slow process.
+### What is a virtual DOM
+It's a way of representing the DOM but in a lightweight way. Under the hood nearly all virtual DOM implementations use simple JavaScript objects as representations and will keep track of the previous render's virtual DOM. Using the previous virtual DOM a diff between the virtual DOMs can be made and only the changes that actually need to be applied.
+
+Just like with HTML these JavaScript objects are used to represent DOM elements however being objects they can be created, manipulated and handled in JavaScript much easier than HTML. That said many virtual DOM implementations used JSX/TSX which makes creating these virtual DOM elements using a syntax that looks a lot like HTML, more on that in the next section.
+
+**Note:** The feature of applying only the differences between each render is not a core requirement of a virtual DOM, just a common feature between implementations.
+
+### Why
+As DOM elements in the browser are quite heavy in both memory usage and CPU processing time minimising how many are created is optimal. Creating an element can also trigger a recalculation of the layout which depending on the complexity of the UI that can also be a slow process.
 
 A virtual DOM is like another format that sits on-top of the DOM and is specifically used to apply changes to the DOM in bulk. As updating the DOM will nearly always trigger a recalculation of the layout you want to make as many changes in one go as possible and having a central piece of code that handles doing that helps with reducing unnecessary DOM updates.
 
-Under the hood nearly all virtual DOM implementations use simple Javascript objects as representations and will keep track of the previous render's virtual DOM. Using the previous virtual DOM a diff between the virtual DOMs can be made and only the changes that actually need to be applied. However the feature of applying only the differences between each render is not a core requirement of a virtual DOM, just a common feature between implementations.
-### Why
-
+It is very much possible to create a virtual DOM using HTML, to some degree that's how older frameworks used to work. Using string templates (such as [Mustache](http://mustache.github.io/)) to create a HTML string and then giving that to the browser to turn into elements. This generally has widespread support from the browsers and gives the developer full access to all the HTML attributes out of the box. However it has the major downsides of doing any sort of additional manipulation of elements during creation is quite hard and linking JavaScript event handlers to strings requires a bunch of hoops. Doing a diff between big strings makes it hard to know what actually changes without turning that string into a data structure that can be handled in JavaScript directly. Which sort of leads to us to where virtual DOM frameworks are today, skipping straight to the JavaScript object representation.
 ## Add TSX support to our Virtual DOM UI
 
 ### What
