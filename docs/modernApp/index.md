@@ -6,13 +6,14 @@ We’re going to tackle state management, TSX (Typescript JSX) and why these pat
 - Let’s create a basic state management without and UI.
 - Let’s create a basic virtual DOM UI library without TSX.
 - Let’s add TSX support.
+- Let's make a fully working Todo app.
 
 ## Basic state management
 
 ### What
 In relation to web dev state management is simply how the information about the web app is stored.
 
-Very early on in web apps state management was given little thought as most web sites had limited functionality. As seen [here](https://www.javaworld.com/article/2077176/using-javascript-and-forms.html) in an article from 1996 JavaScript is being used to pull and change data on form input elements before the data is sent to the server in a format similar to URL parameters ([more info on MDN about format data](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Sending_and_retrieving_form_data)).
+Very early on in web apps state management was given little thought as most web sites had limited functionality. As seen [here](https://www.javaworld.com/article/2077176/using-javascript-and-forms.html) in an article from 1996 JavaScript is being used to pull and change data on form input elements before the data is sent to the server in a format similar to URL parameters ([more info on MDN about form data](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Sending_and_retrieving_form_data)).
 
 Whilst this wouldn't be recommended by today's standards it does show an example of state management. The state is being stored on the form input elements and updating those values updates the UI and conversely clicking the submit button allows for the JavaScript to pull data off those elements and do validations.
 
@@ -33,6 +34,10 @@ Even though I had a degree in computer science and was fairly comfortable with t
 State management is the application of good computer science fundamentals. It takes lessons learned about functional code, immutable data structures and applies to how a web app should be structured.
 
 As such good state management is about making it testable and making use of functional code that will behave predictably. Of course state management isn't defined by it's use of functional code nor immutable data structures but they are well suited to it.
+
+Good state management generally fits into the [Model-View-ViewModel](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) or MVVM pattern. That's not the most elegant name but it essentially talks about creating a separation between how the data is stored, how the data should be displayed and then the display itself. The key part being the *how the data should be displayed*. The layer between the data and the display allows for multiple different displays for the same data as well the display code not needing to be tied to a specific data set either.
+
+In practice rigid application of these patterns rarely happens but they are usually the basis for the reasons behind why code is put in certain places.
 
 ### Creating our own state management
 [Here](./createStateManagement.md) is an example of creating basic state management. Feel free to skip this part if you're already comfortable with state management.
@@ -55,7 +60,7 @@ A simple example of a parent child element.
 
 The `div` parent element contains two children, the `strong` element and then a plain text node. In some cases the white space before the `strong` node might be included as a text node with white space.
 
-### What is a virtual DOM
+### What is a Virtual DOM
 It's a way of representing the DOM but in a lightweight way. Under the hood nearly all virtual DOM implementations use simple JavaScript objects as representations and will keep track of the previous render's virtual DOM. Using the previous virtual DOM a diff between the virtual DOMs can be made and only the changes that actually need to be applied.
 
 Just like with HTML these JavaScript objects are used to represent DOM elements however being objects they can be created, manipulated and handled in JavaScript much easier than HTML. That said many virtual DOM implementations used JSX/TSX which makes creating these virtual DOM elements using a syntax that looks a lot like HTML, more on that in the next section.
@@ -68,6 +73,10 @@ As DOM elements in the browser are quite heavy in both memory usage and CPU proc
 A virtual DOM is like another format that sits on-top of the DOM and is specifically used to apply changes to the DOM in bulk. As updating the DOM will nearly always trigger a recalculation of the layout you want to make as many changes in one go as possible and having a central piece of code that handles doing that helps with reducing unnecessary DOM updates.
 
 It is very much possible to create a virtual DOM using HTML, to some degree that's how older frameworks used to work. Using string templates (such as [Mustache](http://mustache.github.io/)) to create a HTML string and then giving that to the browser to turn into elements. This generally has widespread support from the browsers and gives the developer full access to all the HTML attributes out of the box. However it has the major downsides of doing any sort of additional manipulation of elements during creation is quite hard and linking JavaScript event handlers to strings requires a bunch of hoops. Doing a diff between big strings makes it hard to know what actually changes without turning that string into a data structure that can be handled in JavaScript directly. Which sort of leads to us to where virtual DOM frameworks are today, skipping straight to the JavaScript object representation.
+
+### Create our own Virtual DOM
+[Here](./createVirtualDom.md) is a very basic example of creating our own virtual DOM. Feel free to skip this part if you're already comfortable with virtual DOMs.
+
 ## Add TSX support to our Virtual DOM UI
 
 ### What
