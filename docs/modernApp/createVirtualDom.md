@@ -3,6 +3,33 @@ Here we're going to go over creating our own very basic virtual DOM framework.
 
 **NOTE** This version will **not** handle applying diffs between renders and will instead throw out the previous DOM and render a whole new one. As such this example is not intended for proper use but illustrates the core concepts of a virtual DOM.
 
+## What's the difference between a Node and an Element?
+First some info about terminology.
+
+### Node:
+Nodes are the base class for all objects that be in a `document`, including the `document` itself.
+
+Properties common to nodes:
+* parentNode
+* childNodes
+* nodeName
+
+All the common stuff for navigating the document tree.
+
+Example nodes:
+* The `document` itself
+* Text elements
+* HTML elements (div, span, input, etc)
+* HTML comments
+
+### Element:
+So elements are a subclass of node and are specifically for `<element>` type nodes.
+
+Properties common to elements:
+* className
+* innerHTML
+* attributes
+
 ## Creating the data structures
 So we're aiming to have a way to create DOM elements from some JavaScript Objects (not quite JSON since we want to be able to pass functions to event handlers).
 
@@ -12,17 +39,18 @@ By convention the map of attributes is called `props` however this could be call
 
 Let's start with the most basic example.
 ```typescript
-// How we want our object elements to look like
-interface ObjectElement
+// How we want our virtual elements to look like
+export interface VirtualElement
 {
     // The name of the node type ('div', 'span', etc)
     type: string;
 
+    // Properties of the this virtual DOM element.
     props: Props;
 
     // Children can be text or another object element.
     // We need the text special type otherwise we wouldn't have a way to specify text.
-    children: VirtualElement[];
+    children: VirtualNode[];
 }
 
 // Our properties/attributes are just a map of string keys to any value at the moment.
@@ -31,11 +59,11 @@ interface Props
     [key: string]: any;
 }
 
-// An element is either the object above or plain text.
-type VirtualElement = ObjectElement | string;
+// A virtual node is either and element above or plain text.
+export type VirtualNode = VirtualElement | string;
 
 // Example header element.
-const header: ObjectElement = {
+const header: VirtualElement = {
     type: 'h1',
     props: {},
     children: ['Our first virtual DOM']
@@ -49,7 +77,7 @@ We want to be able to turn this into something that would look like this in HTML
 ```
 
 ### A create function
-So our create function needs to take an `Element` and turn it into a `HTMLElement`.
+So our create function needs to take a `VirtualNode` and turn it into a `Node`.
 
 How do we create an element in the DOM with the DOM API?
 
@@ -61,28 +89,29 @@ How do we create an element in the DOM with the DOM API?
 So let's put that into practice with our own `create` function.
 
 ```typescript
-function create(element: Element): HTMLElement | Text
+// Takes a virtual node and turns it into a DOM node.
+function create(node: VirtualNode): Node
 {
     // Check for string element
-    if (typeof(element) === 'string')
+    if (typeof(node) === 'string')
     {
-        // The DOM already has a function for creating text nodes which is returned as type Text.
-        return document.createTextNode(element);
+        // The DOM already has a function for creating text nodes.
+        return document.createTextNode(node);
     }
 
-    // The createElement function accepts the node type as a string, which is returned as type HTMLElement.
-    const domElement = document.createElement(element.type);
+    // The createElement function accepts the node type as a string.
+    const domElement = document.createElement(node.type);
 
     // Add all attributes to the element.
     // No handling of event handlers for now.
-    for (const prop in element.props)
+    for (const prop in node.props)
     {
         // setAttribute is used for any attribute on an element such as class, value, src, etc.
-        domElement.setAttribute(prop, element.props[prop]);
+        domElement.setAttribute(prop, node.props[prop]);
     }
 
     // Append all child elements.
-    for (const child of element.children)
+    for (const child of node.children)
     {
         domElement.append(create(child));
     }
@@ -116,21 +145,22 @@ Given that all the attributes and event listeners are on the same object we need
 So let's update our create function:
 
 ```typescript
-function create(element: VirtualElement): HTMLElement | Text
+// Takes a virtual node and turns it into a DOM node.
+function create(node: VirtualNode): Node
 {
     // Check for string element
-    if (typeof(element) === 'string')
+    if (typeof(node) === 'string')
     {
         // The DOM already has a function for creating text nodes.
-        return document.createTextNode(element);
+        return document.createTextNode(node);
     }
 
     // The createElement function accepts the node type as a string.
-    const domElement = document.createElement(element.type);
+    const domElement = document.createElement(node.type);
 
     // Add all attributes to the element.
     // No handling of event handlers for now.
-    for (const prop in element.props)
+    for (const prop in node.props)
     {
         // Check if the string starts with the letters 'on'.
         // Note this function is not available in Internet Explorer.
@@ -141,17 +171,17 @@ function create(element: VirtualElement): HTMLElement | Text
             // It'll pick on anything that starts with 'on', like 'onion' or 'once'.
             // Also we're not checking if the value is actually a function.
             // For now to get a working example UI we'll go with it.
-            domElement.addEventListener(prop.substr(2), element.props[prop]);
+            domElement.addEventListener(prop.substr(2), node.props[prop]);
         }
         else
         {
             // setAttribute is used for any attribute on an element such as class, value, src, etc.
-            domElement.setAttribute(prop, element.props[prop]);
+            domElement.setAttribute(prop, node.props[prop]);
         }
     }
 
     // Append all child elements.
-    for (const child of element.children)
+    for (const child of node.children)
     {
         domElement.append(create(child));
     }
@@ -163,38 +193,12 @@ function create(element: VirtualElement): HTMLElement | Text
 Let's also create a helper function for creating the virtual DOM elements
 
 ```typescript
-function vdom(type: string, props: Props, ...children: VirtualElement[])
+// Helper function for creating virtual DOM object.
+function vdom(type: string, props: Props, ...children: VirtualNode[]): VirtualElement
 {
     return { type, props, children };
 }
 ```
-
-## What's the difference between a Node and an Element?
-So the terms **node** and **element** have come up but what's the difference between them?
-
-### Node:
-Nodes are the base class for all objects that be in a `document`, including the `document` itself.
-
-Properties common to nodes:
-* parentNode
-* childNodes
-* nodeName
-
-All the common stuff for navigating the document tree.
-
-Example nodes:
-* The `document` itself
-* Text elements
-* HTML elements (div, span, input, etc)
-* HTML comments
-
-### Element:
-So elements are a subclass of node and are specifically for `<element>` type nodes.
-
-Properties common to elements:
-* className
-* innerHTML
-* attributes
 
 ## Let's use what we've got to render an app
 
@@ -224,3 +228,65 @@ function render()
 So this will render our app with a button that has a click event attached!
 
 The `vdom` calls don't make it easy to read and you probably don't want to create any big complicated interfaces with it, but you could.
+
+## Can we render it again?
+
+So the last example allows us to render the app at least once but it will directly append the result to the document body each time which doesn't really allow for rendering again after something has changed.
+
+So we need a node to render into and we want to check if the parent node has any children already.
+
+```typescript
+// Renders the given virtualNode into the given parent node.
+// This will clear the parent node of all its children.
+function render(virtualNode: VirtualNode, parent: Node)
+{
+    const domNode = create(virtualNode);
+
+    // Make sure to clear the parent node of any children.
+    while (parent.childNodes.length > 0)
+    {
+        parent.firstChild.remove();
+    }
+
+    // Now add our rendered node into the parent.
+    parent.appendChild(domNode);
+}
+
+```
+
+## An interactive example
+Now that we can render the app multiple times lets create a very basic interactive example.
+
+```typescript
+// We've moved the generic rendering functions into their own file.
+import { vdom, render } from "./vdom";
+
+let buttonClickTimes = 0;
+function onClickButton()
+{
+    buttonClickTimes++;
+    renderApp();
+}
+
+function renderApp()
+{
+    // Example app
+    const app = vdom('main', {},
+        vdom('h1', {}, 'Header'),
+        vdom('p', {},
+            vdom('strong', {}, 'A button'),
+            vdom('button', { onclick: onClickButton }, 'Button Text'),
+            vdom('span', {}, `Button clicked ${buttonClickTimes} times`)
+        )
+    );
+
+    const rootElement = document.getElementById('root');
+    render(app, rootElement);
+}
+
+// Render the app on start
+renderApp();
+```
+
+## A built example
+There's an example [here](./virtualDomExample/deploy/index.html) with the code found [here](./virtualDomExample/index.ts).
