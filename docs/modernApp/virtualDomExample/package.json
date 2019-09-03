@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel --no-cache --no-hmr ./index.html",
-    "build": "parcel build -d deploy/ ./index.html"
+    "start": "parcel --no-cache --no-hmr ./example2.html",
+    "build": "parcel build -d deploy/ ./example1.html && parcel build -d deploy/ ./example2.html"
   },
   "author": "",
   "license": "ISC",

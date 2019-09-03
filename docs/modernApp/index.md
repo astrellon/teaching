@@ -78,7 +78,41 @@ It is very much possible to create a virtual DOM using HTML, to some degree that
 [Here](./createVirtualDom.md) is a very basic example of creating our own virtual DOM. Feel free to skip this part if you're already comfortable with virtual DOMs.
 
 ## Add TSX support to our Virtual DOM UI
+TSX (TypeScript XML) is the TypeScript version of JSX, which is basically JSX plus types.
 
 ### What
+TSX allows creating virtual nodes in a syntax that looks like HTML/XML but actually get conveted to plain function calls. Making it easier to create UI elements in a format that is understandable whilst keeping the flexibility of JavaScript/TypeScript.
+
+At this time TSX/JSX is **NOT** supported in the browser, as such it needs an additional build step for supporting it.
+
+```typescript
+// Example of creating an app using a virtual DOM function (vdom).
+const appVDom = vdom('main', {},
+    vdom('h1', {}, 'Header'),
+    vdom('p', {},
+        vdom('strong', {}, 'A button'),
+        vdom('button', { onclick: onClickButton }, 'Button Text'),
+        vdom('span', {}, `Button clicked ${buttonClickTimes} times`)
+    )
+);
+
+// Example of creating the same* app but using TSX.
+const appTSX = <main>
+    <h1>Header</h1>
+    <p>
+        <strong>A button</strong>
+        <button onclick={onClickButton}>Button Text</button>
+        <span>{`Button clicked ${buttonClickTimes} times`}</span>
+    </p>
+</main>;
+
+//*: So for the sack of formatting the TSX example will actually contain whitespace
+//   between each element whereas the first example does not contain the whitespace.
+```
+
+Actually accounting for number of characters written the TSX example isn't really any better but it should be more readable.
 
 ### Why
+The reasons for using TSX/JSX over directly using the virtual DOM calls (in React that is `React.createElement`) is for readability.
+
+It does require another build step however given that it now has fairly widespread support across various build systems. Generally if the web app is complex enough to warrant using a UI framework like React then the additional readability of JSX should also be used.

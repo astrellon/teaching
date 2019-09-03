@@ -1,10 +1,18 @@
-import { vdom, render } from "./vdom";
+import { vdom, render, VirtualNode } from "./vdom";
 
 let buttonClickTimes = 0;
 function onClickButton()
 {
     buttonClickTimes++;
     renderApp();
+}
+
+function sayHi(props: {name: string}): VirtualNode
+{
+    return vdom('div', {},
+        'Hello ',
+        vdom('strong', {}, props.name)
+    );
 }
 
 function renderApp()
@@ -16,6 +24,12 @@ function renderApp()
             vdom('strong', {}, 'A button'),
             vdom('button', { onclick: onClickButton }, 'Button Text'),
             vdom('span', {}, `Button clicked ${buttonClickTimes} times`)
+        ),
+
+        vdom('p', {},
+            'Using render functions',
+            vdom(sayHi, {name: 'Foo'}),
+            vdom(sayHi, {name: 'Bar'})
         )
     );
 

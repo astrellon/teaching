@@ -2,7 +2,7 @@
 export interface VirtualElement
 {
     // The name of the node type ('div', 'span', etc)
-    type: string;
+    type: VirtualNodeType;
 
     // Properties of the this virtual DOM element.
     props: Props;
@@ -20,6 +20,8 @@ interface Props
 
 // A virtual node is either and element above or plain text.
 export type VirtualNode = VirtualElement | string;
+export type CreateNode = (props: Props) => VirtualNode;
+export type VirtualNodeType = string | CreateNode;
 
 // Takes a virtual node and turns it into a DOM node.
 export function create(node: VirtualNode): Node
@@ -29,6 +31,12 @@ export function create(node: VirtualNode): Node
     {
         // The DOM already has a function for creating text nodes.
         return document.createTextNode(node);
+    }
+
+    // Check for functional render
+    if (typeof(node.type) === 'function')
+    {
+        return create(node.type(node.props));
     }
 
     // The createElement function accepts the node type as a string.
@@ -82,7 +90,7 @@ export function render(virtualNode: VirtualNode, parent: Node)
 }
 
 // Helper function for creating virtual DOM object.
-export function vdom(type: string, props: Props, ...children: VirtualNode[]): VirtualElement
+export function vdom(type: VirtualNodeType, props: Props, ...children: VirtualNode[]): VirtualElement
 {
     return { type, props, children };
 }

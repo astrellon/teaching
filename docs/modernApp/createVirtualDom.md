@@ -289,4 +289,148 @@ renderApp();
 ```
 
 ## A built example
-There's an example [here](./virtualDomExample/deploy/index.html) with the code found [here](./virtualDomExample/index.ts).
+There's an example [here](./virtualDomExample/deploy/example1.html) with the code found [here](./virtualDomExample/).
+
+## What about components?
+So far we've been just been worrying about creating what's called intrinsic element, basically existing HTML elements. But what about components?
+
+This comes down to how you would want to organise a more complex UI framework like React.
+
+Two ways is to use a function that takes the `props` and returns a new virtual node made up of just intrinsic elements. Another is to use a class instance that has a known `render` function that returns the virtual node.
+
+Let's take a look at the function version
+
+```typescript
+type CreateNode = (props: Props) => VirtualNode;
+```
+
+Now wan update our data structures:
+
+```typescript
+export interface VirtualElement
+{
+    // The name of the node type ('div', 'span', etc)
+    type: VirtualNodeType;
+
+    // Properties of the this virtual DOM element.
+    props: Props;
+
+    // Children can be text or another object element.
+    // We need the text special type otherwise we wouldn't have a way to specify text.
+    children: VirtualNode[];
+}
+
+export type CreateNode = (props: Props) => VirtualNode;
+export type VirtualNodeType = string | CreateNode;
+
+export function vdom(type: VirtualNodeType, props: Props, ...children: VirtualNode[]): VirtualElement
+{
+    return { type, props, children };
+}
+```
+
+We have had to allow for the node type to be either a string or a function that will create a virtual node.
+
+Let's update our create function again!
+
+```typescript
+// Takes a virtual node and turns it into a DOM node.
+export function create(node: VirtualNode): Node
+{
+    // Check for string element
+    if (typeof(node) === 'string')
+    {
+        // The DOM already has a function for creating text nodes.
+        return document.createTextNode(node);
+    }
+
+    // Check for functional render
+    if (typeof(node.type) === 'function')
+    {
+        return create(node.type(node.props));
+    }
+
+    // The createElement function accepts the node type as a string.
+    const domElement = document.createElement(node.type);
+
+    // Add all attributes to the element.
+    // No handling of event handlers for now.
+    for (const prop in node.props)
+    {
+        // Check if the string starts with the letters 'on'.
+        // Note this function is not available in Internet Explorer.
+        if (prop.startsWith('on'))
+        {
+            // Chop off the first two characters and use the rest as the event listener type.
+            // Note: This is *not* the correct way to do this.
+            // It'll pick on anything that starts with 'on', like 'onion' or 'once'.
+            // Also we're not checking if the value is actually a function.
+            // For now to get a working example UI we'll go with it.
+            domElement.addEventListener(prop.substr(2), node.props[prop]);
+        }
+        else
+        {
+            // setAttribute is used for any attribute on an element such as class, value, src, etc.
+            domElement.setAttribute(prop, node.props[prop]);
+        }
+    }
+
+    // Append all child elements.
+    for (const child of node.children)
+    {
+        domElement.append(create(child));
+    }
+
+    return domElement;
+}
+```
+
+We only had to add one check for the `node.type` being a function.
+
+Let's also update our example to make a somewhat contrived use of the a functional render.
+
+```typescript
+import { vdom, render, VirtualNode } from "./vdom";
+
+let buttonClickTimes = 0;
+function onClickButton()
+{
+    buttonClickTimes++;
+    renderApp();
+}
+
+function sayHi(props: {name: string}): VirtualNode
+{
+    return vdom('div', {},
+        'Hello ',
+        vdom('strong', {}, props.name)
+    );
+}
+
+function renderApp()
+{
+    // Example app
+    const app = vdom('main', {},
+        vdom('h1', {}, 'Header'),
+        vdom('p', {},
+            vdom('strong', {}, 'A button'),
+            vdom('button', { onclick: onClickButton }, 'Button Text'),
+            vdom('span', {}, `Button clicked ${buttonClickTimes} times`)
+        ),
+
+        vdom('p', {},
+            'Using render functions',
+            vdom(sayHi, {name: 'Foo'}),
+            vdom(sayHi, {name: 'Bar'})
+        )
+    );
+
+    const rootElement = document.getElementById('root');
+    render(app, rootElement);
+}
+
+// Render the app on start
+renderApp();
+```
+
+[Here](./virtualDomExample/deploy/example2.html) is a built example using the functional arguments.
