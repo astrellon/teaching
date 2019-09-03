@@ -20,7 +20,7 @@ interface Props
 // An element is either the object above or plain text.
 type VirtualElement = ObjectElement | string;
 
-function render(element: VirtualElement): HTMLElement | Text
+function create(element: VirtualElement): HTMLElement | Text
 {
     // Check for string element
     if (typeof(element) === 'string')
@@ -57,38 +57,16 @@ function render(element: VirtualElement): HTMLElement | Text
     // Append all child elements.
     for (const child of element.children)
     {
-        domElement.append(render(child));
+        domElement.append(create(child));
     }
 
     return domElement;
 }
 
-function vdom(type: string, props: Props, ...children: VirtualElement[]): ObjectElement
+function render(virtualElement: VirtualElement)
 {
-    return { type, props, children };
-}
-
-let buttonClickTimes = 0;
-function onClickButton()
-{
-    buttonClickTimes++;
-    renderApp();
-}
-
-function renderApp()
-{
-    // Example app
-    const app = vdom('main', {},
-        vdom('h1', {}, 'Header'),
-        vdom('p', {},
-            vdom('strong', {}, 'A button'),
-            vdom('button', { onclick: onClickButton }, 'Button Text'),
-            vdom('span', {}, `Button clicked ${buttonClickTimes} times`)
-        )
-    );
-
     const rootDomElement = document.getElementById('root');
-    const domApp = render(app);
+    const domApp = create(virtualElement);
 
     if (rootDomElement.childNodes.length > 0)
     {
@@ -100,5 +78,30 @@ function renderApp()
     }
 }
 
+function vdom(type: string, props: Props, ...children: VirtualElement[]): ObjectElement
+{
+    return { type, props, children };
+}
+
+let buttonClickTimes = 0;
+function onClickButton()
+{
+    buttonClickTimes++;
+    render(renderApp());
+}
+
+function renderApp()
+{
+    // Example app
+    return vdom('main', {},
+        vdom('h1', {}, 'Header'),
+        vdom('p', {},
+            vdom('strong', {}, 'A button'),
+            vdom('button', { onclick: onClickButton }, 'Button Text'),
+            vdom('span', {}, `Button clicked ${buttonClickTimes} times`)
+        )
+    );
+}
+
 // Render the app
-renderApp();
+render(renderApp());

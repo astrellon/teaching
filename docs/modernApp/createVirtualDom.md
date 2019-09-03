@@ -168,3 +168,59 @@ function vdom(type: string, props: Props, ...children: VirtualElement[])
     return { type, props, children };
 }
 ```
+
+## What's the difference between a Node and an Element?
+So the terms **node** and **element** have come up but what's the difference between them?
+
+### Node:
+Nodes are the base class for all objects that be in a `document`, including the `document` itself.
+
+Properties common to nodes:
+* parentNode
+* childNodes
+* nodeName
+
+All the common stuff for navigating the document tree.
+
+Example nodes:
+* The `document` itself
+* Text elements
+* HTML elements (div, span, input, etc)
+* HTML comments
+
+### Element:
+So elements are a subclass of node and are specifically for `<element>` type nodes.
+
+Properties common to elements:
+* className
+* innerHTML
+* attributes
+
+## Let's use what we've got to render an app
+
+```typescript
+function onClickButton()
+{
+    alert('Clicked the button!');
+}
+
+function render()
+{
+    // Example app
+    const app = vdom('main', {},
+        vdom('h1', {}, 'Header'),
+        vdom('p', {},
+            vdom('strong', {}, 'A button'),
+            vdom('button', { onclick: onClickButton }, 'Button Text')
+        )
+    );
+
+    // Create the DOM elements
+    const domApp = create(app);
+    document.body.append(domElement);
+}
+```
+
+So this will render our app with a button that has a click event attached!
+
+The `vdom` calls don't make it easy to read and you probably don't want to create any big complicated interfaces with it, but you could.
