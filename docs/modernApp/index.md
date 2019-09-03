@@ -1,11 +1,11 @@
 # Creating a modern web app from scratch
 Lets create a modern web app but we’re going to create the main components from scratch and we’re going to use Typescript and Parcel Bundler to do it.
 
-We’re going to tackle state management, TSX (Typescript JSX) and why these patterns are used.
+We’re going to tackle state management, JSX (JavaScript XML) and why these patterns are used.
 
 - Let’s create a basic state management without and UI.
-- Let’s create a basic virtual DOM UI library without TSX.
-- Let’s add TSX support.
+- Let’s create a basic virtual DOM UI library without JSX.
+- Let’s add JSX support.
 - Let's make a fully working Todo app.
 
 ## Basic state management
@@ -63,7 +63,7 @@ The `div` parent element contains two children, the `strong` element and then a 
 ### What is a Virtual DOM
 It's a way of representing the DOM but in a lightweight way. Under the hood nearly all virtual DOM implementations use simple JavaScript objects as representations and will keep track of the previous render's virtual DOM. Using the previous virtual DOM a diff between the virtual DOMs can be made and only the changes that actually need to be applied.
 
-Just like with HTML these JavaScript objects are used to represent DOM elements however being objects they can be created, manipulated and handled in JavaScript much easier than HTML. That said many virtual DOM implementations used JSX/TSX which makes creating these virtual DOM elements using a syntax that looks a lot like HTML, more on that in the next section.
+Just like with HTML these JavaScript objects are used to represent DOM elements however being objects they can be created, manipulated and handled in JavaScript much easier than HTML. That said many virtual DOM implementations used JSX which makes creating these virtual DOM elements using a syntax that looks a lot like HTML, more on that in the next section.
 
 **Note:** The feature of applying only the differences between each render is not a core requirement of a virtual DOM, just a common feature between implementations.
 
@@ -77,15 +77,14 @@ It is very much possible to create a virtual DOM using HTML, to some degree that
 ### Create our own Virtual DOM
 [Here](./createVirtualDom.md) is a very basic example of creating our own virtual DOM. Feel free to skip this part if you're already comfortable with virtual DOMs.
 
-## Add TSX support to our Virtual DOM UI
-TSX (TypeScript XML) is the TypeScript version of JSX, which is basically JSX plus types.
+## Add JSX support to our Virtual DOM UI
 
 ### What
-TSX allows creating virtual nodes in a syntax that looks like HTML/XML but actually get conveted to plain function calls. Making it easier to create UI elements in a format that is understandable whilst keeping the flexibility of JavaScript/TypeScript.
+JSX allows creating virtual nodes in a syntax that looks like HTML/XML but actually get converted to plain function calls. Making it easier to create UI elements in a format that is understandable whilst keeping the flexibility of JavaScript/TypeScript.
 
-At this time TSX/JSX is **NOT** supported in the browser, as such it needs an additional build step for supporting it.
+At this time JSX is **NOT** supported in the browser, as such it needs an additional build step for supporting it.
 
-```typescript
+```tsx
 // Example of creating an app using a virtual DOM function (vdom).
 const appVDom = vdom('main', {},
     vdom('h1', {}, 'Header'),
@@ -96,8 +95,8 @@ const appVDom = vdom('main', {},
     )
 );
 
-// Example of creating the same* app but using TSX.
-const appTSX = <main>
+// Example of creating the same* app but using JSX.
+const appJsx = <main>
     <h1>Header</h1>
     <p>
         <strong>A button</strong>
@@ -106,13 +105,17 @@ const appTSX = <main>
     </p>
 </main>;
 
-//*: So for the sack of formatting the TSX example will actually contain whitespace
-//   between each element whereas the first example does not contain the whitespace.
+//*: So for the sack of formatting the JSX example will actually
+//   contain whitespace between each element whereas the first
+//   example does not contain the whitespace.
 ```
 
-Actually accounting for number of characters written the TSX example isn't really any better but it should be more readable.
+Actually accounting for number of characters written the JSX example isn't really any better but it should be more readable.
 
 ### Why
-The reasons for using TSX/JSX over directly using the virtual DOM calls (in React that is `React.createElement`) is for readability.
+The reasons for using JSX over directly using the virtual DOM calls (in React that is `React.createElement`) is for readability.
 
 It does require another build step however given that it now has fairly widespread support across various build systems. Generally if the web app is complex enough to warrant using a UI framework like React then the additional readability of JSX should also be used.
+
+### Add JSX support to the Virtual DOM.
+[Here](./addingVirtualDomJsxSupport.md) is further details about how to add JSX support to our virtual DOM framework.

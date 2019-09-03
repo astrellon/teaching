@@ -370,7 +370,8 @@ export function create(node: VirtualNode): Node
         }
         else
         {
-            // setAttribute is used for any attribute on an element such as class, value, src, etc.
+            // setAttribute is used for any attribute on an element
+            // such as class, value, src, etc.
             domElement.setAttribute(prop, node.props[prop]);
         }
     }
