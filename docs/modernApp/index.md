@@ -119,3 +119,19 @@ It does require another build step however given that it now has fairly widespre
 
 ### Add JSX support to the Virtual DOM.
 [Here](./addingVirtualDomJsxSupport.md) is further details about how to add JSX support to our virtual DOM framework.
+
+## Combining it all together in a Todo app
+Alright we've now created our own state management, a virtual DOM framework and added JSX support for that framework.
+
+Let's see if we can create a very basic Todo app with it all.
+
+[Here](./createTodoApp.md) is the further details about this.
+
+## Conclusion
+Hopefully at this point some of these simple building blocks for many modern apps are a bit demystified.
+
+The state management we've created is pretty robust (and simple) and can easily be used to create non-trivial webapps. It might not have the extra devtools like Redux-DevTools which is a shame, but failing that it does a lot with not much.
+
+The virtual DOM framework is very barebones, full blown virtual DOM frameworks usually have a fair bit more to them. For one not removing all the existing elements and starting again each time, for one there will likely be problems with input elements if they are managed by the state. However at their core they're about representing the DOM in a way that can be easily processed by JavaScript and adding JSX support isn't as complicated as it might seem. However for full JSX TypeScript support it can take some time creating all the interfaces for all the different elements.
+
+Let me know if things still don't make sense or if my explanations of why don't add up on my [Twitter](https://twitter.com/Alan_Lawrey) or by [email](mailto:alan.lawrey@gmail.com)
