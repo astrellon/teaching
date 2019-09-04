@@ -435,3 +435,5 @@ renderApp();
 ```
 
 [Here](./virtualDomExample/deploy/example2.html) is a built example using the functional arguments.
+
+[Here](https://github.com/astrellon/teaching/tree/master/docs/modernApp/virtualDomExample) is the code for these examples.

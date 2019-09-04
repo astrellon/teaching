@@ -116,3 +116,5 @@ renderApp();
 
 ## A built example
 [Here](./addingVirtualDomJsxSupport/deploy/index.html) is a built example of this. Although it shouldn't look any different except under the hood the source code uses JSX.
+
+[Here](https://github.com/astrellon/teaching/tree/master/docs/modernApp/addingVirtualDomJsxSupport) is the code for that example.
