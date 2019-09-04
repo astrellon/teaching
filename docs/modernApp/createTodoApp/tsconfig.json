@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "jsxFactory": "vdom",
+        "jsx": "react"
+    },
+    "files": ["index.tsx"]
+}

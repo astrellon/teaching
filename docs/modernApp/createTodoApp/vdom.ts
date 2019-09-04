@@ -66,7 +66,6 @@ export function create(node: VirtualNode): Node
         }
     }
 
-    // Append all child elements.
     for (const child of node.children)
     {
         domElement.append(create(child));
@@ -94,5 +93,8 @@ export function render(virtualNode: VirtualNode, parent: Node)
 // Helper function for creating virtual DOM object.
 export function vdom(type: VirtualNodeType, props: Props, ...children: VirtualNode[]): VirtualElement
 {
-    return { type, props, children };
+    // Handle getting back an array of children. Eg: [[item1, item2]] instead of just [item1, item2].
+    const flatten = !!children ? children.reduce((acc: VirtualNode[], val) => acc.concat(val), []) : [];
+
+    return { type, props, children: flatten };
 }
