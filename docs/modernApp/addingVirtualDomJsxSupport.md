@@ -115,4 +115,4 @@ renderApp();
 ```
 
 ## A built example
-[Here](./addingJsxVirtualDom/deploy/index.html) is a built example of this. Although it shouldn't look any different except under the hood the source code uses JSX.
+[Here](./addingVirtualDomJsxSupport/deploy/index.html) is a built example of this. Although it shouldn't look any different except under the hood the source code uses JSX.
