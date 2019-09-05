@@ -3,10 +3,10 @@ Lets create a modern web app but we’re going to create the main components fro
 
 We’re going to tackle state management, JSX (JavaScript XML) and why these patterns are used.
 
-- Let’s create a basic state management without and UI.
-- Let’s create a basic virtual DOM UI library without JSX.
-- Let’s add JSX support.
-- Let's make a fully working Todo app.
+- [Let’s create a basic state management without and UI](#basic-state-management).
+- [Let’s create a basic virtual DOM UI library without JSX](#basic-virtual-dom-ui).
+- [Let’s add JSX support](#add-jsx-support-to-our-virtual-dom-ui).
+- [Let's make a fully working Todo app](#combining-it-all-together-in-a-todo-app).
 
 ## Basic state management
 
