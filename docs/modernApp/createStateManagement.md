@@ -203,7 +203,7 @@ export class Store<TState>
 
 That's the basis of our store! There are some nice things we can add like a way to remove a subscription, add features for history support, add some sort of way of customising how a subscription is triggered like only when a specific part of the store changes. Those are all features on top of the core of this state management.
 
-You can find the final code [here](store.ts).
+You can find the final code [here](./stateManagement/store.ts).
 
 **The Real Todo Example**
 So we've created our state management store now let's use it for real.
