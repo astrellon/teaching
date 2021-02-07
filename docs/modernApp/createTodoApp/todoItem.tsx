@@ -10,9 +10,6 @@ export function TodoItemView(props: { item: TodoItem })
 {
     return <div>
         <strong>{props.item.text}</strong>
-        <button onclick={() =>
-        {
-            removeItem(props.item.id);
-        }}>Remove</button>
+        <button onclick={() => removeItem(props.item.id)}>Remove</button>
     </div>
 }
