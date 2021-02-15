@@ -130,7 +130,7 @@ document.body.append(domElement);
 ### Adding event handlers
 Before we can make an interesting event handler we're going to need some event handling functionality.
 
-For the sack of convention and compatibility with other frameworks lets add the event handlers to the `props` map.
+For the sake of convention and compatibility with other frameworks lets add the event handlers to the `props` map.
 
 So how do we add an event handler using the DOM API?
 

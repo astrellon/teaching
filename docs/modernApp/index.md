@@ -95,7 +95,7 @@ const appVDom = vdom('main', {},
     )
 );
 
-// Example of creating the same* app but using JSX.
+// Example of creating the same app but using JSX.
 const appJsx = <main>
     <h1>Header</h1>
     <p>
@@ -104,10 +104,6 @@ const appJsx = <main>
         <span>{`Button clicked ${buttonClickTimes} times`}</span>
     </p>
 </main>;
-
-//*: So for the sack of formatting the JSX example will actually
-//   contain whitespace between each element whereas the first
-//   example does not contain the whitespace.
 ```
 
 Actually accounting for number of characters written the JSX example isn't really any better but it should be more readable.
